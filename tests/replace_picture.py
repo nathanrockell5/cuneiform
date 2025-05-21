@@ -5,7 +5,7 @@ Created : 2017-09-03
 @author: Eric Lapouyade
 """
 
-from docxtpl import DocxTemplate
+from cuneiform import DocxTemplate
 
 DEST_FILE = "output/replace_picture.docx"
 

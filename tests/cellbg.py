@@ -5,7 +5,7 @@ Created : 2015-03-12
 @author: Eric Lapouyade
 """
 
-from docxtpl import DocxTemplate, RichText
+from cuneiform import DocxTemplate, RichText
 
 tpl = DocxTemplate("templates/cellbg_tpl.docx")
 

@@ -141,7 +141,8 @@ class DocxTemplate(object):
             cell_xml = re.sub(r"<w:shd[^/]*/>", "", cell_xml, count=1)
             return re.sub(
                 r"(<w:tcPr[^>]*>)",
-                r'\1<w:shd w:val="clear" w:color="auto" w:fill="{{%s}}"/>' % m.group(2),
+                r'\1<w:shd w:val="clear" w:color="auto" w:fill="{{%s}}"/>' % m.group(
+                    2),
                 cell_xml,
             )
 
@@ -167,7 +168,8 @@ class DocxTemplate(object):
         )
 
         # {%- will merge with previous paragraph text
-        src_xml = re.sub(r"</w:t>(?:(?!</w:t>).)*?{%-", "{%", src_xml, flags=re.DOTALL)
+        src_xml = re.sub(
+            r"</w:t>(?:(?!</w:t>).)*?{%-", "{%", src_xml, flags=re.DOTALL)
         # -%} will merge with next paragraph text
         src_xml = re.sub(
             r"-%}(?:(?!<w:t[ >]|{%|{{).)*?<w:t[^>]*?>", "%}", src_xml, flags=re.DOTALL
@@ -199,7 +201,8 @@ class DocxTemplate(object):
             def v_merge(m1):
                 return (
                     '<w:vMerge w:val="{% if loop.first %}restart{% else %}continue{% endif %}"/>'
-                    + m1.group(1)  # Everything between ``</w:tcPr>`` and ``<w:t>``.
+                    # Everything between ``</w:tcPr>`` and ``<w:t>``.
+                    + m1.group(1)
                     + "{% if loop.first %}"
                     + m1.group(2)  # Everything before ``{% vm %}``.
                     + m1.group(3)  # Everything after ``{% vm %}``.
@@ -227,21 +230,24 @@ class DocxTemplate(object):
         def h_merge_tc(m):
             xml_to_patch = (
                 m.group()
-            )  # Everything between ``</w:tc>`` and ``</w:tc>`` with ``{% hm %}`` inside.
+                # Everything between ``</w:tc>`` and ``</w:tc>`` with ``{% hm %}`` inside.
+            )
 
             def with_gridspan(m1):
                 return (
                     m1.group(1)  # ``w:gridSpan w:val="``.
                     + "{{ "
                     + m1.group(2)
-                    + " * loop.length }}"  # Content of ``w:val``, multiplied by loop length.
+                    # Content of ``w:val``, multiplied by loop length.
+                    + " * loop.length }}"
                     + m1.group(3)  # Closing quotation mark.
                 )
 
             def without_gridspan(m2):
                 return (
                     '<w:gridSpan w:val="{{ loop.length }}"/>'
-                    + m2.group(1)  # Everything between ``</w:tcPr>`` and ``<w:t>``.
+                    # Everything between ``</w:tcPr>`` and ``<w:t>``.
+                    + m2.group(1)
                     + m2.group(2)  # Everything before ``{% hm %}``.
                     + m2.group(3)  # Everything after ``{% hm %}``.
                     + m2.group(4)  # ``</w:t>``.
@@ -311,7 +317,8 @@ class DocxTemplate(object):
                 line_number = max(exc.lineno - 4, 0)
                 exc.docx_context = map(
                     lambda x: re.sub(r"<[^>]+>", "", x),
-                    src_xml.splitlines()[line_number: (line_number + 7)],  # fmt: skip
+                    src_xml.splitlines()[line_number: (
+                        line_number + 7)],  # fmt: skip
                 )
 
             raise exc
@@ -379,7 +386,8 @@ class DocxTemplate(object):
                 "\t",
                 "</w:t></w:r>"
                 "<w:r>%s<w:tab/></w:r>"
-                '<w:r>%s<w:t xml:space="preserve">' % (run_properties, run_properties),
+                '<w:r>%s<w:t xml:space="preserve">' % (
+                    run_properties, run_properties),
             )
             xml = xml.replace(
                 "\a",
@@ -402,7 +410,8 @@ class DocxTemplate(object):
             run_properties = run_properties.group(0) if run_properties else ""
             return re.sub(
                 r"<w:t(?: [^>]*)?>.*?</w:t>",
-                lambda x: resolve_text(run_properties, paragraph_properties, x),
+                lambda x: resolve_text(
+                    run_properties, paragraph_properties, x),
                 m.group(0),
                 flags=re.DOTALL,
             )
@@ -460,9 +469,11 @@ class DocxTemplate(object):
 
     def map_headers_footers_xml(self, relKey, xml):
         part = self.docx._part.rels[relKey].target_part
-        new_part = XmlPart.load(part.partname, part.content_type, xml, part.package)
+        new_part = XmlPart.load(
+            part.partname, part.content_type, xml, part.package)
         for rId, rel in part.rels.items():
-            new_part.load_rel(rel.reltype, rel._target, rel.rId, rel.is_external)
+            new_part.load_rel(rel.reltype, rel._target,
+                              rel.rId, rel.is_external)
         self.docx._part.rels[relKey]._target = new_part
 
     def render(
@@ -493,12 +504,14 @@ class DocxTemplate(object):
         self.map_tree(tree)
 
         # Headers
-        headers = self.build_headers_footers_xml(context, self.HEADER_URI, jinja_env)
+        headers = self.build_headers_footers_xml(
+            context, self.HEADER_URI, jinja_env)
         for relKey, xml in headers:
             self.map_headers_footers_xml(relKey, xml)
 
         # Footers
-        footers = self.build_headers_footers_xml(context, self.FOOTER_URI, jinja_env)
+        footers = self.build_headers_footers_xml(
+            context, self.FOOTER_URI, jinja_env)
         for relKey, xml in footers:
             self.map_headers_footers_xml(relKey, xml)
 
@@ -544,13 +557,15 @@ class DocxTemplate(object):
                         c.set(
                             ns + "w",
                             str(
-                                int(float(c.get(ns + "w")) * new_average / old_average)
+                                int(float(c.get(ns + "w")) *
+                                    new_average / old_average)
                             ),
                         )
                     # add new columns
                     for i in range(to_add):
                         etree.SubElement(
-                            tblGrid, ns + "gridCol", {ns + "w": str(int(new_average))}
+                            tblGrid, ns +
+                            "gridCol", {ns + "w": str(int(new_average))}
                         )
 
             # Refetch columns after columns addition.
@@ -561,7 +576,8 @@ class DocxTemplate(object):
 
             def get_cell_len(total, cell):
                 tc_pr = cell.find(ns + "tcPr")
-                grid_span = None if tc_pr is None else tc_pr.find(ns + "gridSpan")
+                grid_span = None if tc_pr is None else tc_pr.find(
+                    ns + "gridSpan")
 
                 if grid_span is not None:
                     return total + int(grid_span.get(ns + "val"))
@@ -759,17 +775,20 @@ class DocxTemplate(object):
                     for item in zin.infolist():
                         buf = zin.read(item.filename)
                         if item.filename in self.zipname_to_replace:
-                            zout.writestr(item, self.zipname_to_replace[item.filename])
+                            zout.writestr(
+                                item, self.zipname_to_replace[item.filename])
                         elif (
                             item.filename.startswith("word/media/")
                             and item.CRC in self.crc_to_new_media
                         ):
-                            zout.writestr(item, self.crc_to_new_media[item.CRC])
+                            zout.writestr(
+                                item, self.crc_to_new_media[item.CRC])
                         elif (
                             item.filename.startswith("word/embeddings/")
                             and item.CRC in self.crc_to_new_embedded
                         ):
-                            zout.writestr(item, self.crc_to_new_embedded[item.CRC])
+                            zout.writestr(
+                                item, self.crc_to_new_embedded[item.CRC])
                         else:
                             zout.writestr(item, buf)
 
@@ -800,7 +819,8 @@ class DocxTemplate(object):
         # make sure all template images defined by user were replaced
         for img_id, replaced in replaced_pics.items():
             if not replaced:
-                raise ValueError("Picture %s not found in the docx template" % img_id)
+                raise ValueError(
+                    "Picture %s not found in the docx template" % img_id)
 
     def get_pic_map(self):
         return self.pic_map
@@ -811,7 +831,8 @@ class DocxTemplate(object):
 
         part_map = {}
 
-        gds = et.xpath("//a:graphic/a:graphicData", namespaces=docx.oxml.ns.nsmap)
+        gds = et.xpath("//a:graphic/a:graphicData",
+                       namespaces=docx.oxml.ns.nsmap)
         for gd in gds:
             rel = None
             # Either IMAGE, CHART, SMART_ART, ...
@@ -821,7 +842,8 @@ class DocxTemplate(object):
                     blip = gd.xpath(
                         "pic:pic/pic:blipFill/a:blip", namespaces=docx.oxml.ns.nsmap
                     )[0]
-                    dest = blip.xpath("@r:embed", namespaces=docx.oxml.ns.nsmap)
+                    dest = blip.xpath(
+                        "@r:embed", namespaces=docx.oxml.ns.nsmap)
                     if len(dest) > 0:
                         rel = dest[0]
                     else:
@@ -898,3 +920,44 @@ class DocxTemplate(object):
         return meta.find_undeclared_variables(parse_content)
 
     undeclared_template_variables = property(get_undeclared_template_variables)
+
+
+class TypedDocxTemplate(DocxTemplate):
+    def get_typed_undeclared_template_variables(self, jinja_env: Optional[Environment] = None) -> Dict[str, Optional[str]]:
+        self.init_docx(reload=False)
+        xml = self.get_xml()
+        xml = self.patch_xml(xml)
+
+        for uri in [self.HEADER_URI, self.FOOTER_URI]:
+            for relKey, part in self.get_headers_footers(uri):
+                _xml = self.get_part_xml(part)
+                xml += self.patch_xml(_xml)
+
+        env = jinja_env or Environment()
+
+        # Extract typed variables (e.g., {{ name: Text }})
+        raw_vars = self._extract_typed_variables(xml)
+
+        # 🧪 Show what variables were found
+        print("Raw typed variables:", raw_vars)
+
+        # ⚠️ Replace all `{{ name: Type }}` → `{{ name }}`
+        cleaned_xml = re.sub(r"{{\s*(\w+)\s*:\s*\w+\s*}}", r"{{ \1 }}", xml)
+
+        # 🧪 Debug print to make sure it's cleaned
+        print("Cleaned XML for Jinja:\n", cleaned_xml)
+
+        # ✅ Now it's safe to parse with Jinja
+        parsed_vars = meta.find_undeclared_variables(env.parse(cleaned_xml))
+
+        return {name: raw_vars.get(name) for name in parsed_vars}
+
+    @property
+    def typed_undeclared_variables(self) -> Dict[str, Optional[str]]:
+        return self.get_typed_undeclared_template_variables()
+
+    def _extract_typed_variables(self, xml: str) -> Dict[str, str]:
+        # Match variables like {{ name: Text }} or {{ name:Text }}
+        pattern = re.compile(r"{{\s*(\w+)\s*:\s*(\w+)\s*}}")
+        matches = pattern.findall(xml)
+        return {name: type_ for name, type_ in matches}

@@ -5,7 +5,7 @@ Created : 2015-03-26
 @author: Eric Lapouyade
 """
 
-from docxtpl import DocxTemplate, RichText
+from cuneiform import DocxTemplate, RichText
 
 tpl = DocxTemplate("templates/richtext_and_if_tpl.docx")
 

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created : 2015-03-12
+Created : 2025 04 23
 
-@author: Eric Lapouyade
+@author: Nathan Rockell
 """
 __version__ = "0.19.1"
 
@@ -11,4 +11,4 @@ from .inline_image import InlineImage
 from .listing import Listing
 from .richtext import RichText, R
 from .subdoc import Subdoc
-from .template import DocxTemplate
+from .template import DocxTemplate, TypedDocxTemplate

@@ -5,7 +5,7 @@ Created : 2015-03-12
 @author: Eric Lapouyade
 """
 
-from docxtpl import DocxTemplate
+from cuneiform import DocxTemplate
 from docx.shared import Inches
 
 tpl = DocxTemplate("templates/subdoc_tpl.docx")
@@ -30,7 +30,8 @@ hdr_cells = table.rows[0].cells
 hdr_cells[0].text = "Qty"
 hdr_cells[1].text = "Id"
 hdr_cells[2].text = "Desc"
-recordset = ((1, 101, "Spam"), (2, 42, "Eggs"), (3, 631, "Spam,spam, eggs, and ham"))
+recordset = ((1, 101, "Spam"), (2, 42, "Eggs"),
+             (3, 631, "Spam,spam, eggs, and ham"))
 for item in recordset:
     row_cells = table.add_row().cells
     row_cells[0].text = str(item[0])

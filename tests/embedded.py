@@ -5,7 +5,7 @@ Created : 2017-09-09
 @author: Eric Lapouyade
 """
 
-from docxtpl import DocxTemplate
+from cuneiform import DocxTemplate
 
 # rendering the "dynamic embedded docx":
 embedded_docx_tpl = DocxTemplate("templates/embedded_embedded_docx_tpl.docx")

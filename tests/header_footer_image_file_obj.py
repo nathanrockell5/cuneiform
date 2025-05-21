@@ -5,7 +5,7 @@ Created : 2019-05-22
 @author: Eric Dufresne
 """
 
-from docxtpl import DocxTemplate
+from cuneiform import DocxTemplate
 import io
 
 DEST_FILE = "output/header_footer_image_file_obj.docx"

@@ -1,4 +1,4 @@
-from docxtpl import DocxTemplate
+from cuneiform import DocxTemplate
 
 tpl = DocxTemplate("templates/comments_tpl.docx")
 

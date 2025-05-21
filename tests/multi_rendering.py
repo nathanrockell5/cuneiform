@@ -5,7 +5,7 @@ Created : 2021-12-20
 @author: Eric Lapouyade
 """
 
-from docxtpl import DocxTemplate
+from cuneiform import DocxTemplate
 
 tpl = DocxTemplate("templates/multi_rendering_tpl.docx")
 

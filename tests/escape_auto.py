@@ -5,7 +5,7 @@
 import os
 from unicodedata import name
 
-from docxtpl import DocxTemplate
+from cuneiform import DocxTemplate
 
 
 XML_RESERVED = """<"&'>"""

@@ -1,4 +1,4 @@
-from docxtpl import DocxTemplate, RichText
+from cuneiform import DocxTemplate, RichText
 
 tpl = DocxTemplate("templates/word2016_tpl.docx")
 tpl.render(

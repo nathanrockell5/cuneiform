@@ -13,7 +13,7 @@ QUIET_ARG = "quiet"
 
 def make_arg_parser():
     parser = argparse.ArgumentParser(
-        usage="python -m docxtpl [-h] [-o] [-q] {} {} {}".format(
+        usage="python -m cuneiform [-h] [-o] [-q] {} {} {}".format(
             TEMPLATE_ARG, JSON_ARG, OUTPUT_ARG
         ),
         description="Make docx file from existing template docx and json data.",

@@ -5,7 +5,7 @@ Created : 2015-03-12
 @author: sandeeprah, Eric Lapouyade
 """
 
-from docxtpl import DocxTemplate
+from cuneiform import DocxTemplate
 import jinja2
 
 jinja_env = jinja2.Environment()

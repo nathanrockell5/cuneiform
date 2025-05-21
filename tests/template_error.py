@@ -1,4 +1,4 @@
-from docxtpl import DocxTemplate
+from cuneiform import DocxTemplate
 from jinja2.exceptions import TemplateError
 
 print("=" * 80)

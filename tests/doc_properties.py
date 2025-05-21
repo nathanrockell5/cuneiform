@@ -1,4 +1,4 @@
-from docxtpl import DocxTemplate
+from cuneiform import DocxTemplate
 
 doctemplate = r"templates/doc_properties_tpl.docx"
 

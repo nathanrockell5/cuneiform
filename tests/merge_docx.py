@@ -5,7 +5,7 @@ Created : 2021-07-30
 @author: Eric Lapouyade
 """
 
-from docxtpl import DocxTemplate
+from cuneiform import DocxTemplate
 
 
 tpl = DocxTemplate("templates/merge_docx_master_tpl.docx")

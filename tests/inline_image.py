@@ -5,7 +5,7 @@ Created : 2017-01-14
 @author: Eric Lapouyade
 """
 
-from docxtpl import DocxTemplate, InlineImage
+from cuneiform import DocxTemplate, InlineImage
 
 # for height and width you have to use millimeters (Mm), inches or points(Pt) class :
 from docx.shared import Mm

@@ -5,7 +5,7 @@ Created : 2022-08-03
 """
 
 
-from docxtpl import DocxTemplate, RichText
+from cuneiform import DocxTemplate, RichText
 
 tpl = DocxTemplate("templates/richtext_eastAsia_tpl.docx")
 rt = RichText("测试TEST", font="eastAsia:Microsoft YaHei")

@@ -5,7 +5,7 @@ Created : 2024-09-23
 @author: Bart Broere
 """
 
-from docxtpl import DocxTemplate
+from cuneiform import DocxTemplate
 
 DEST_FILE = "output/footnotes.docx"
 

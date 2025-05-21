@@ -5,7 +5,7 @@ Created : 2017-10-15
 @author: Arthaslixin
 """
 
-from docxtpl import DocxTemplate
+from cuneiform import DocxTemplate
 
 tpl = DocxTemplate("templates/vertical_merge_tpl.docx")
 

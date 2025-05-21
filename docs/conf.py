@@ -193,8 +193,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', 'python-docx-template.tex', u'python-docx-template Documentation',
-   u'Eric Lapouyade', 'manual'),
+    ('index', 'python-docx-template.tex', u'python-docx-template Documentation',
+     u'Eric Lapouyade', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -237,9 +237,9 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'python-docx-template', u'python-docx-template Documentation',
-   u'Eric Lapouyade', 'python-docx-template', 'One line description of project.',
-   'Miscellaneous'),
+    ('index', 'python-docx-template', u'python-docx-template Documentation',
+     u'Eric Lapouyade', 'python-docx-template', 'One line description of project.',
+     'Miscellaneous'),
 ]
 
 # Documents to append as an appendix to all manuals.

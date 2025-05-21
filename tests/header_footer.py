@@ -5,7 +5,7 @@ Created : 2015-03-12
 @author: Eric Lapouyade
 """
 
-from docxtpl import DocxTemplate
+from cuneiform import DocxTemplate
 
 tpl = DocxTemplate("templates/header_footer_tpl.docx")
 

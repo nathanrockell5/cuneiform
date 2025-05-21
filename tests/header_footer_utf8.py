@@ -7,7 +7,7 @@ Created : 2016-07-19
 Edited : 2016-07-19 by Eric Lapouyade
 """
 
-from docxtpl import DocxTemplate
+from cuneiform import DocxTemplate
 
 tpl = DocxTemplate("templates/header_footer_tpl_utf8.docx")
 

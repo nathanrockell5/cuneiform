@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "docxtpl"
+name = "cuneiform"
 version = "0.17.0"
 description = "Python docx template engine"
-authors = ["Eric Lapouyade"]
+authors = ["Nathan Rockell"]
 readme = "README.rst"
 
 [tool.poetry.dependencies]
