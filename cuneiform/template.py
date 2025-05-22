@@ -78,7 +78,7 @@ class DocxTemplate(object):
         with open(filename, "w") as fh:
             fh.write(self.get_xml())
 
-    def patch_xml(self, src_xml):
+    def patch_xml(self, src_xml, strip_types: bool = True):
         """Make a lots of cleaning to have a raw xml understandable by jinja2 :
         strip all unnecessary xml tags, manage table cell background color and colspan,
         unescape html entities, etc..."""
@@ -95,9 +95,11 @@ class DocxTemplate(object):
         # same thing with {% ... %} and {# #}
         # "jinja2 stuff" could a variable, a 'if' etc... anything jinja2 will understand
         def striptags(m):
-            return re.sub(
-                "</w:t>.*?(<w:t>|<w:t [^>]*>)", "", m.group(0), flags=re.DOTALL
-            )
+            text = re.sub(
+                r"</w:t>.*?(<w:t>|<w:t [^>]*>)", "", m.group(0), flags=re.DOTALL)
+            if strip_types:
+                text = re.sub(r"\s*:\s*\w+", "", text)
+            return text
 
         src_xml = re.sub(
             r"{%(?:(?!%}).)*|{#(?:(?!#}).)*|{{(?:(?!}}).)*",
@@ -923,11 +925,12 @@ class DocxTemplate(object):
 
 
 class TypedDocxTemplate(DocxTemplate):
-    def get_typed_undeclared_template_variables(self, jinja_env: Optional[Environment] = None) -> Dict[str, Optional[str]]:
+    def get_typed_undeclared_template_variables(
+        self, jinja_env: Optional[Environment] = None
+    ) -> Dict[str, Optional[str]]:
         self.init_docx(reload=False)
         xml = self.get_xml()
-        xml = self.patch_xml(xml)
-
+        xml = self.patch_xml(xml, strip_types=False)
         for uri in [self.HEADER_URI, self.FOOTER_URI]:
             for relKey, part in self.get_headers_footers(uri):
                 _xml = self.get_part_xml(part)
@@ -935,26 +938,14 @@ class TypedDocxTemplate(DocxTemplate):
 
         env = jinja_env or Environment()
 
-        # Extract typed variables (e.g., {{ name: Text }})
+        # Extract raw variables from the XML
         raw_vars = self._extract_typed_variables(xml)
 
-        # 🧪 Show what variables were found
-        print("Raw typed variables:", raw_vars)
-
-        # ⚠️ Replace all `{{ name: Type }}` → `{{ name }}`
-        cleaned_xml = re.sub(r"{{\s*(\w+)\s*:\s*\w+\s*}}", r"{{ \1 }}", xml)
-
-        # 🧪 Debug print to make sure it's cleaned
-        print("Cleaned XML for Jinja:\n", cleaned_xml)
-
-        # ✅ Now it's safe to parse with Jinja
-        parsed_vars = meta.find_undeclared_variables(env.parse(cleaned_xml))
+        # Parse the document to filter down to only real Jinja2 variables
+        xml = self.patch_xml(xml)
+        parsed_vars = meta.find_undeclared_variables(env.parse(xml))
 
         return {name: raw_vars.get(name) for name in parsed_vars}
-
-    @property
-    def typed_undeclared_variables(self) -> Dict[str, Optional[str]]:
-        return self.get_typed_undeclared_template_variables()
 
     def _extract_typed_variables(self, xml: str) -> Dict[str, str]:
         # Match variables like {{ name: Text }} or {{ name:Text }}
